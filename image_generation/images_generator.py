@@ -1,11 +1,11 @@
 import random
 from PIL import Image, ImageDraw, ImageFilter
 
-def blurGeneration(numOfImages, currentImageNum):
+def blurGeneration(numOfImages, currentImageNum, blurRadius):
     for num in range(numOfImages):
         image = Image.open(str(num + 1) + '.jpg')
 
-        bluredImage = image.filter(ImageFilter.GaussianBlur(3))
+        bluredImage = image.filter(ImageFilter.GaussianBlur(blurRadius))
         bluredImage.save(str(currentImageNum) + '.jpg')
         currentImageNum += 1
 
@@ -130,24 +130,26 @@ def flipGeneration(numOfImages, currentImageNum):
         flipedImage.save(str(currentImageNum) + '.jpg')
         currentImageNum += 1
 
-print("Input number of images:")
+print("Enter number of images:")
 numOfImages = int(input())
-print("Input noise factor 1: (f.e. 33)")
+print("Enter blur radius: (e. g. 3)")
+blurRadius = int(input())
+print("Enter noise factor 1: (e. g. 33)")
 noiseFactor1 = int(input())
-print("Input noise factor 2: (f.e. 100)")
+print("Enter noise factor 2: (e. g. 100)")
 noiseFactor2 = int(input())
-print("Input brightness factor 1: (f.e. 100)")
+print("Enter brightness factor 1: (e. g. 100)")
 brightnessFactor1 = int(input())
-print("Input brightness factor 2: (f.e. -100)")
+print("Enter brightness factor 2: (e. g. -100)")
 brightnessFactor2 = int(input())
-print("Input sepia depth: (f.e. 30)")
+print("Enter sepia depth: (e. g. 30)")
 sepiaDepth = int(input())
-print("Input rotate degrees: (f.e. 45)")
+print("Enter rotate degrees: (e. g. 45)")
 rotateDegrees = int(input())
 currentImageNum = numOfImages + 1
 print("Please, wait...")
 
-blurGeneration(numOfImages, currentImageNum)
+blurGeneration(numOfImages, currentImageNum, blurRadius)
 currentImageNum += numOfImages
 noiseGeneration(numOfImages, currentImageNum, noiseFactor1)
 currentImageNum += numOfImages
@@ -168,3 +170,5 @@ rotateGeneration(numOfImages, currentImageNum, rotateDegrees)
 currentImageNum = (numOfImages * 2) + 1
 numOfImages = currentImageNum - 1
 flipGeneration(numOfImages, currentImageNum)
+
+print("Generating is over.")
