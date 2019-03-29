@@ -5,42 +5,54 @@ from tqdm import tqdm
 import random
 import pickle
 
-def create_training_data(training_data, dir, categories, image_size):
+def create_data(dir, categories, imageSize):
+    data = []
     for category in categories:
         path = os.path.join(dir, category)
-        class_num = categories.index(category)
+        classNum = categories.index(category)
 
         for image in tqdm(os.listdir(path)):
             try:
-                image_array = cv2.imread(os.path.join(path, image), cv2.IMREAD_GRAYSCALE)
-                normalized_image_array = cv2.resize(image_array, (image_size, image_size))
-                training_data.append([normalized_image_array, class_num])
+                imageArray = cv2.imread(os.path.join(path, image), cv2.IMREAD_GRAYSCALE)
+                normalizedImageArray = cv2.resize(imageArray, (imageSize, imageSize))
+                data.append([normalizedImageArray, classNum])
 
             except Exception:
                 pass
 
+    return data
+
+def make_pickle(data, fileName, dataDir):
+    pickleOut = open(dataDir + "\pickles\\" + fileName, "wb")
+    pickle.dump(data, pickleOut)
+    pickleOut.close()
+
+def process_data(data, imageSize):
+    X = []
+    y = []
+    for features, label in data:
+        X.append(features)
+        y.append(label)
+
+    X = np.array(X).reshape(-1, imageSize, imageSize, 1)
+    X = X / 255.0
+    return X, y
+
 categories = ["cats", "dogs"]
 print("Enter directory name with data (it must include 2 folders with names \"cats\" and \"dogs\")\n"
-      "e. g. C:/Users/SingeRous/Desktop/training/generated_base")
-dir = input()
+      "e. g. C:\\Users\\SingeRous\\Desktop\\training")
+dataDir = input()
 print("Enter image size for reshaping")
-image_size = int(input())
-training_data = []
-create_training_data(training_data, dir, categories, image_size)
-random.shuffle(training_data)
+imageSize = int(input())
+trainingData = create_data(dataDir + "\\generated\\", categories, imageSize)
+testingData = create_data(dataDir + "\\test\\", categories, imageSize)
+random.shuffle(trainingData)
+random.shuffle(testingData)
 
-X = []
-y = []
+XTrain, yTrain = process_data(trainingData, imageSize)
+XTest, yTest = process_data(testingData, imageSize)
 
-for features, label in training_data:
-    X.append(features)
-    y.append(label)
-
-X = np.array(X).reshape(-1, image_size, image_size, 1)
-pickle_out = open("X.pickle", "wb")
-pickle.dump(X, pickle_out)
-pickle_out.close()
-
-pickle_out = open("y.pickle", "wb")
-pickle.dump(y, pickle_out)
-pickle_out.close()
+make_pickle(XTrain, "XTrain.pickle", dataDir + "\\generated\\")
+make_pickle(yTrain, "yTrain.pickle", dataDir + "\\generated\\")
+make_pickle(XTest, "XTest.pickle", dataDir + "\\test\\")
+make_pickle(yTest, "yTest.pickle", dataDir + "\\test\\")
