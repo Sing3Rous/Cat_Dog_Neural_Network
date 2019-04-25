@@ -13,7 +13,7 @@ def create_data(dir, categories, imageSize):
 
         for image in tqdm(os.listdir(path)):
             try:
-                imageArray = cv2.imread(os.path.join(path, image), cv2.IMREAD_GRAYSCALE)
+                imageArray = cv2.imread(os.path.join(path, image), cv2.IMREAD_COLOR)
                 normalizedImageArray = cv2.resize(imageArray, (imageSize, imageSize))
                 data.append([normalizedImageArray, classNum])
 
@@ -34,7 +34,7 @@ def process_data(data, imageSize):
         X.append(features)
         y.append(label)
 
-    X = np.array(X).reshape(-1, imageSize, imageSize, 1)
+    X = np.array(X).reshape(-1, imageSize, imageSize, 3)
     X = X / 255.0
     return X, y
 
