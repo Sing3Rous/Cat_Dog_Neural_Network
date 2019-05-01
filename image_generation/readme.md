@@ -20,5 +20,5 @@ user enetring number of images, noise factor 1/2, brightness factor 1/2, sepia d
 6. **_grayscale_** on every base image (by the following exapmle now its 196 images)
 7. **_sepia_** on every base image (by the following exapmle now its 224 images)
 8. **_negative_** on every base image (by the following exapmle now its 252 images)
-9. **_rotating_** every image (not only base!) (by the following exapmle now its 504 images)
-10. **_flipping_** every image (not only base!) (by the following exapmle now its 1008 images)
+9. **_rotating_** every image (**not only base!**) (by the following exapmle now its 504 images)
+10. **_flipping_** every image (**not only base!**) (by the following exapmle now its 1008 images)
